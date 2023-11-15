@@ -1,0 +1,18 @@
+#left {
+  font-size: 1px;
+  width: 50vw;
+  columns: 30;
+  font-weight: 1000;
+}
+
+#left ol {
+  padding: 0;
+}
+
+#left ul {
+  padding: 0;
+}
+
+#left dd {
+  margin: 0;
+}
