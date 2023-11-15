@@ -1,4 +1,11 @@
+#app {
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+}
+
 #left {
+  flex: 1;
   font-size: 1px;
   width: 50vw;
   columns: 30;
@@ -15,4 +22,15 @@
 
 #left dd {
   margin: 0;
+}
+
+#right {
+  flex: 1;
+  font-family: "Vollkorn";
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+#right h1 {
+  font-size: 400%;
 }

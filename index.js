@@ -7,8 +7,10 @@ async function fetchHtmlAsText(url) {
 }
 
 async function init() {
-    const contentDiv = document.getElementById("left");
-    contentDiv.innerHTML = await fetchHtmlAsText("stgb.html");
+    const left = document.getElementById("left");
+    left.innerHTML = await fetchHtmlAsText("stgb.html");
+    const right = document.getElementById("right");
+    right.innerHTML = await fetchHtmlAsText("cover.html");
 }
 
 window.addEventListener("load", (event) => {
