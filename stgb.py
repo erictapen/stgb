@@ -13,6 +13,12 @@ h_depth = {
   "h7": 7,
 }
 
+def attrs_string(attrs):
+  res = ""
+  for (k, v) in attrs:
+    res += f"{k}=\"{v}\" "
+  return res
+
 class MyHTMLParser(HTMLParser):
     stack = []
 
@@ -27,7 +33,7 @@ class MyHTMLParser(HTMLParser):
                 self.stack.append(tag)
                 print(f"<div id=\"{v}-div\">")
         indent = (len(self.stack) - 1) * "  "
-        print(f"{indent}<{tag}>")
+        print(f"{indent}<{tag} {attrs_string(attrs)}>")
 
     def handle_endtag(self, tag):
           indent = (len(self.stack) - 1) * "  "
