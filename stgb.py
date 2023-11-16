@@ -21,28 +21,31 @@ def attrs_string(attrs):
 
 class MyHTMLParser(HTMLParser):
     stack = []
+    structure = dict()
+    output = ""
 
     def handle_starttag(self, tag, attrs):
         if tag in h_depth.keys():
           for (k, v) in attrs:
             if k == "id":
               if len(self.stack) > 0 and h_depth[tag] <= h_depth[self.stack[-1]]:
-                print("</div>")
+                self.output += "</div>\n"
                 self.stack.pop()
               else:
                 self.stack.append(tag)
-                print(f"<div id=\"{v}-div\">")
+                self.output += f"<div id=\"{v}-div\">\n"
+                self.structure[f"{v}-div"] = dict()
         indent = (len(self.stack) - 1) * "  "
-        print(f"{indent}<{tag} {attrs_string(attrs)}>")
+        self.output += f"{indent}<{tag} {attrs_string(attrs)}>\n"
 
     def handle_endtag(self, tag):
           indent = (len(self.stack) - 1) * "  "
-          print(f"{indent}</{tag}>")
+          self.output += f"{indent}</{tag}>\n"
 
     def handle_data(self, data):
         indent = len(self.stack) * "  "
         for line in data.splitlines():
-          print(f"{indent}{line}")
+          self.output += f"{indent}{line}\n"
 
 
 parser = MyHTMLParser()
@@ -51,4 +54,9 @@ parser.feed(sys.stdin.read())
 while len(parser.stack) > 0:
   parser.stack.pop()
   indent = len(parser.stack) * "  "
-  print(f"{indent}</div>")
+  parser.output += f"{indent}</div>\n"
+
+with open("stgb.html", "w") as f:
+  f.write(parser.output)
+
+print(parser.structure)
