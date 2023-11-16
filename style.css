@@ -25,33 +25,29 @@
   margin-left: 1em;
 }
 
-/*#left .h1 {
-  background: #ffffff;
+#left .h1 .lowlight {
+  background: #dddddd;
 }
 
-#left .h2 {
-  background: #ffffff;
+#left .h2 .lowlight {
+  background: #cccccc;
 }
 
-#left .h3 {
+#left .h3 .lowlight {
   background: #aaaaaa;
 }
 
-#left .h4 {
+#left .h4 .lowlight {
   background: #999999;
 }
 
-#left .h5 {
+#left .h5 .lowlight {
   background: #777777;
 }
 
-#left .h6 {
+#left .h6 .lowlight {
   background: #555555;
 }
-
-#left .h :hover {
-  background: yellow;
-}*/
 
 #left .highlight {
   background: yellow;

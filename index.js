@@ -28,6 +28,7 @@ async function init() {
         event.target.classList.add("highlight");
         metadata["part_of"].forEach(function(parent) {
           document.getElementById(parent).classList.remove("highlight");
+          document.getElementById(parent).classList.add("lowlight");
         });
         document.getElementById(`right-${metadata["level"]}`).innerHTML = metadata["title"];
       });
@@ -35,6 +36,7 @@ async function init() {
         console.log(event);
         let metadata = structure[event.target.id]
         event.target.classList.remove("highlight");
+        event.target.classList.remove("lowlight");
         document.getElementById(`right-${metadata["level"]}`).innerHTML = "";
       });
       // structure[key];

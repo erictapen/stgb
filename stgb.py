@@ -21,7 +21,8 @@ def attrs_string(attrs):
   return res
 
 def sanitize_title(title):
-  res = title.replace("\n", " ")
+  res = title.strip()
+  res = res.replace("\n", " ")
   if title.endswith(" -"):
     res = title[:-2]
   res = res.replace(" - ", " – ")
