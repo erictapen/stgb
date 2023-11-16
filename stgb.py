@@ -2,6 +2,7 @@
 
 import sys
 import json
+import re
 from html.parser import HTMLParser
 
 h_depth = {
@@ -28,6 +29,13 @@ def sanitize_title(title):
   res = res.replace(" - ", " – ")
   return res
 
+def parse_section(title):
+  match = re.match("^§ ([\d]{1,3}[a-z]{0,1}) ", title)
+  if match:
+    return match.group(1)
+  else:
+    return None
+
 class MyHTMLParser(HTMLParser):
     # Current heading stack
     stack = [("h0", "")]
@@ -38,6 +46,8 @@ class MyHTMLParser(HTMLParser):
     # The name of the h* tag we are in right now. None otherwise. This is not
     # about the chapter, just about the tag.
     in_heading = None
+    # The mapping from section to divs that reference it.
+    sections = dict()
 
     def handle_starttag(self, tag, attrs):
         indent = len(self.stack) * "  "
@@ -66,7 +76,16 @@ class MyHTMLParser(HTMLParser):
 
     def handle_data(self, data):
         if self.in_heading:
-          self.structure[self.in_heading]["title"] = sanitize_title(data)
+          sanitized_title = sanitize_title(data)
+          self.structure[self.in_heading]["title"] = sanitized_title
+          self.structure[self.in_heading]["section"] = parse_section(sanitized_title)
+        else:
+          (_, div_id) = self.stack[-1]
+          for s in re.findall(" ([\d]{1,3}[a-z]{0,1})", data):
+            if not s in self.sections:
+              self.sections[s] = [div_id]
+            else:
+              self.sections[s].append(div_id)
         indent = len(self.stack) * "  "
         for line in data.splitlines():
           self.output += f"{indent}    {line}\n"
@@ -75,15 +94,22 @@ class MyHTMLParser(HTMLParser):
 parser = MyHTMLParser()
 parser.feed(sys.stdin.read())
 
+# Close all div's
 while len(parser.stack) > 1:
   parser.stack.pop()
   indent = len(parser.stack) * "  "
   parser.output += f"{indent}</div>\n"
 
+# Deduplicate references
+for section, references in parser.sections.items():
+  parser.sections[section] = list(set(references))
+
 with open("stgb.html", "w") as f:
   f.write(parser.output)
 
 with open("stgb.json", "w") as f:
-  f.write(json.dumps(parser.structure, indent=4))
+  f.write(
+    json.dumps({"structure": parser.structure, "sections": parser.sections}, indent=4)
+  )
 
 print(f"Wrote {len(parser.structure)} headings.")

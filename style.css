@@ -95,7 +95,7 @@
   width: 50vw;
   columns: 26;
   column-gap: 0;
-  font-weight: 1000;
+  font-weight: 500;
 }
 
 #left ol {
@@ -136,6 +136,22 @@
 
 #left .highlight {
   background: yellow;
+}
+
+#left .h3 .referenced {
+  background: lightblue !important;
+}
+
+#left .h4 .referenced {
+  background: lightblue !important;
+}
+
+#left .h5 .referenced {
+  background: lightblue !important;
+}
+
+#left .h6 .referenced {
+  background: blue !important;
 }
 
 #right {

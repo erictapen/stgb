@@ -12,34 +12,63 @@ async function fetchJSON(url) {
         .catch(err => { throw err });
 }
 
+var referencedElements = []
+
 async function init() {
     const left = document.getElementById("left");
     left.innerHTML = await fetchHtmlAsText("stgb.html");
     const right = document.getElementById("right");
     right.innerHTML = await fetchHtmlAsText("cover.html");
 
-    const structure = await fetchJSON("stgb.json");
+    const data = await fetchJSON("stgb.json");
 
-    Object.keys(structure).forEach(function(id, _) {
+    Object.keys(data["structure"]).forEach(function(id, _) {
       let div = document.getElementById(id);
+
       div.addEventListener("pointerenter", (event) => {
-        console.log(event);
-        let metadata = structure[event.target.id]
+        let metadata = data["structure"][event.target.id]
         event.target.classList.add("highlight");
-        metadata["part_of"].forEach(function(parent) {
+        metadata["part_of"].forEach((parent) => {
           document.getElementById(parent).classList.remove("highlight");
           document.getElementById(parent).classList.add("lowlight");
         });
+
+        section = metadata["section"];
+        if (section) {
+          references = data["sections"][section];
+          if (references) {
+            var referencedElements = references;
+            references.forEach((id) => {
+              document.getElementById(id).classList.add("referenced");
+              console.log("Marked " + section + " " + id);
+            });
+          }
+        }
+        console.log(referencedElements);
+
         document.getElementById(`right-${metadata["level"]}`).innerHTML = metadata["title"];
+
       });
+
       div.addEventListener("pointerleave", (event) => {
-        console.log(event);
-        let metadata = structure[event.target.id]
+        let metadata = data["structure"][event.target.id]
         event.target.classList.remove("highlight");
         event.target.classList.remove("lowlight");
+
+        section = metadata["section"];
+        if (section) {
+          references = data["sections"][section];
+          if (references) {
+            references.forEach((id) => {
+              document.getElementById(id).classList.remove("referenced");
+            });
+            var referencedElements = []
+          }
+        }
+
         document.getElementById(`right-${metadata["level"]}`).innerHTML = "";
       });
-      // structure[key];
+
     });
 
 }
