@@ -2,6 +2,7 @@
   display: flex;
   flex-flow: row;
   width: 100%;
+  font-family: "Vollkorn";
 }
 
 #left {
@@ -26,9 +27,8 @@
 
 #right {
   flex: 1;
-  font-family: "Vollkorn";
-  margin-left: 1em;
-  margin-right: 1em;
+  margin-left: 2em;
+  margin-right: 2em;
 }
 
 #right h1 {

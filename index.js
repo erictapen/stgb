@@ -16,5 +16,5 @@ async function init() {
 window.addEventListener("load", (event) => {
   console.log("page is fully loaded");
   init();
-  console.log("finished")
+  console.log("finished init")
 });

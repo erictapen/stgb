@@ -1,38 +1,48 @@
 #!/usr/bin/env python3
 
+import sys
 from html.parser import HTMLParser
 
-intendation = {
-  "h1": " ",
-  "h2": "  ",
-  "h3": "   ",
-  "h4": "    ",
-  "h5": "     ",
-  "h6": "      ",
-  "h7": "       ",
+h_depth = {
+  "h1": 1,
+  "h2": 2,
+  "h3": 3,
+  "h4": 4,
+  "h5": 5,
+  "h6": 6,
+  "h7": 7,
 }
 
 class MyHTMLParser(HTMLParser):
-    current_tag = (None, None)
+    stack = []
 
     def handle_starttag(self, tag, attrs):
-        if tag in intendation.keys():
+        if tag in h_depth.keys():
           for (k, v) in attrs:
             if k == "id":
-              # print(f"{intendation[tag]}{v}")
-              self.current_tag = (tag, v)
+              if len(self.stack) > 0 and h_depth[tag] <= h_depth[self.stack[-1]]:
+                print("</div>")
+                self.stack.pop()
+              else:
+                self.stack.append(tag)
+                print(f"<div id=\"{v}-div\">")
+        indent = (len(self.stack) - 1) * "  "
+        print(f"{indent}<{tag}>")
 
     def handle_endtag(self, tag):
-        pass
+          indent = (len(self.stack) - 1) * "  "
+          print(f"{indent}</{tag}>")
 
     def handle_data(self, data):
-        if not self.current_tag == (None, None):
-          (tag, _) = self.current_tag
-          data = data.replace("\n", " ")
-          print(f"{intendation[tag]}{intendation[tag]}{data}")
-          self.current_tag = (None, None)
+        indent = len(self.stack) * "  "
+        for line in data.splitlines():
+          print(f"{indent}{line}")
 
 
 parser = MyHTMLParser()
-with open("stgb.html") as f:
-   parser.feed(f.read())
+parser.feed(sys.stdin.read())
+
+while len(parser.stack) > 0:
+  parser.stack.pop()
+  indent = len(parser.stack) * "  "
+  print(f"{indent}</div>")
