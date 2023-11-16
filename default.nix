@@ -4,6 +4,8 @@
 , python3
 , gesetze
 , vollkorn
+, generate-icons
+, imagemagick
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +14,7 @@ stdenv.mkDerivation {
 
   src = ./.;
 
-  nativeBuildInputs = [ pandoc python3 ];
+  nativeBuildInputs = [ pandoc python3 imagemagick ];
 
   buildPhase = ''
     pandoc -t html ${gesetze}/s/stgb/index.md | python3 stgb.py
@@ -20,7 +22,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/fonts
+    mkdir -p $out/icons
     cp cover.html index.html index.js stgb.html stgb.json style.css $out/
     cp ${vollkorn}/share/fonts/truetype/* $out/fonts/
+    ${generate-icons}/bin/generate-icons.sh favicon.svg $out/icons/
   '';
 }

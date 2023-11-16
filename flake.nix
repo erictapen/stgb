@@ -10,7 +10,12 @@
     pkgs = import nixpkgs { system = "x86_64-linux"; };
   in {
 
-    packages.x86_64-linux.stgb = pkgs.callPackage ./. { inherit gesetze; };
+    packages.x86_64-linux.stgb = pkgs.callPackage ./. {
+      inherit gesetze;
+      inherit (self.packages.x86_64-linux) generate-icons;
+    };
+
+    packages.x86_64-linux.generate-icons = import ./icons.nix pkgs;
 
     packages.x86_64-linux.default = self.packages.x86_64-linux.stgb;
 
