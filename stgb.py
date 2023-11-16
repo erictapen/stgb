@@ -20,6 +20,13 @@ def attrs_string(attrs):
     res += f"{k}=\"{v}\" "
   return res
 
+def sanitize_title(title):
+  res = title.replace("\n", " ")
+  if title.endswith(" -"):
+    res = title[:-2]
+  res = res.replace(" - ", " – ")
+  return res
+
 class MyHTMLParser(HTMLParser):
     # Current heading stack
     stack = [("h0", "")]
@@ -58,7 +65,7 @@ class MyHTMLParser(HTMLParser):
 
     def handle_data(self, data):
         if self.in_heading:
-          self.structure[self.in_heading]["title"] = data.replace("\n", " ")
+          self.structure[self.in_heading]["title"] = sanitize_title(data)
         indent = len(self.stack) * "  "
         for line in data.splitlines():
           self.output += f"{indent}    {line}\n"

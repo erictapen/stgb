@@ -69,3 +69,7 @@
 #right h1 {
   font-size: 400%;
 }
+
+#right h3, #right h4, #right h5, #right h6 {
+  margin-right: 10rem;
+}
