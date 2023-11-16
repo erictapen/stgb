@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import json
 from html.parser import HTMLParser
 
 h_depth = {
@@ -28,13 +29,14 @@ class MyHTMLParser(HTMLParser):
         if tag in h_depth.keys():
           for (k, v) in attrs:
             if k == "id":
-              if len(self.stack) > 0 and h_depth[tag] <= h_depth[self.stack[-1]]:
+              if len(self.stack) > 0 and h_depth[tag] <= h_depth[self.stack[-1][0]]:
                 self.output += "</div>\n"
                 self.stack.pop()
               else:
-                self.stack.append(tag)
-                self.output += f"<div id=\"{v}-div\">\n"
-                self.structure[f"{v}-div"] = dict()
+                div_id = f"{v}-div"
+                self.stack.append((tag, div_id))
+                self.output += f"<div id=\"{div_id}\" class=\"{tag}\">\n"
+                self.structure[div_id] = [e[1] for e in self.stack]
         indent = (len(self.stack) - 1) * "  "
         self.output += f"{indent}<{tag} {attrs_string(attrs)}>\n"
 
@@ -59,4 +61,5 @@ while len(parser.stack) > 0:
 with open("stgb.html", "w") as f:
   f.write(parser.output)
 
-print(parser.structure)
+with open("stgb.json", "w") as f:
+  f.write(json.dumps(parser.structure, indent=4))
