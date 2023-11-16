@@ -44,9 +44,9 @@ class MyHTMLParser(HTMLParser):
                 indent = len(self.stack) * "  "
                 self.output += f"{indent}</div>\n"
                 self.stack.pop()
+              self.structure[div_id]["part_of"] = [e[1] for e in self.stack if e[1] != ""]
               self.stack.append((tag, div_id))
               self.output += f"{indent}<div id=\"{div_id}\" class=\"{tag} h\">\n"
-              self.structure[div_id]["part_of"] = [e[1] for e in self.stack]
         indent = len(self.stack) * "  "
         self.output += f"{indent}  <{tag} {attrs_string(attrs)}>\n"
 
