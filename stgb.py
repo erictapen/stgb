@@ -12,7 +12,6 @@ h_depth = {
   "h4": 4,
   "h5": 5,
   "h6": 6,
-  "h7": 7,
 }
 
 def attrs_string(attrs):
@@ -29,7 +28,7 @@ class MyHTMLParser(HTMLParser):
     # The HTML output
     output = ""
     # The name of the h* tag we are in right now. None otherwise. This is not
-    # about the chapter, only about the tag.
+    # about the chapter, just about the tag.
     in_heading = None
 
     def handle_starttag(self, tag, attrs):
@@ -41,13 +40,13 @@ class MyHTMLParser(HTMLParser):
               self.in_heading = div_id
               if not div_id in self.structure:
                 self.structure[div_id] = dict()
-              if h_depth[tag] <= h_depth[self.stack[-1][0]]:
+              prev_tag = self.stack[-1][0]
+              if h_depth[prev_tag] >= h_depth[tag]:
                 self.output += f"{indent}</div>\n"
                 self.stack.pop()
-              elif h_depth[tag] >= h_depth[self.stack[-1][0]]:
-                self.stack.append((tag, div_id))
-                self.output += f"{indent}<div id=\"{div_id}\" class=\"{tag} h\">\n"
-                self.structure[div_id]["part_of"] = [e[1] for e in self.stack]
+              self.stack.append((tag, div_id))
+              self.output += f"{indent}<div id=\"{div_id}\" class=\"{tag} h\">\n"
+              self.structure[div_id]["part_of"] = [e[1] for e in self.stack]
         indent = len(self.stack) * "  "
         self.output += f"{indent}  <{tag} {attrs_string(attrs)}>\n"
 
