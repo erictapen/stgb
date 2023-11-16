@@ -7,22 +7,23 @@
 
 #left {
   flex: 1;
-  font-size: 1px;
+  font-size: 0.75px;
   width: 50vw;
   columns: 30;
+  column-gap: 4em;
   font-weight: 1000;
 }
 
 #left ol {
-  padding: 0;
+  padding-left: 1em;
 }
 
 #left ul {
-  padding: 0;
+  padding-left: 1em;
 }
 
 #left dd {
-  margin: 0;
+  margin-left: 1em;
 }
 
 #right {
