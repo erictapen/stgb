@@ -5,6 +5,7 @@ import json
 from html.parser import HTMLParser
 
 h_depth = {
+  "h0": 0,
   "h1": 1,
   "h2": 2,
   "h3": 3,
@@ -22,7 +23,7 @@ def attrs_string(attrs):
 
 class MyHTMLParser(HTMLParser):
     # Current heading stack
-    stack = []
+    stack = [("h0", "")]
     # Metadata structure, for JSON output
     structure = dict()
     # The HTML output
@@ -40,10 +41,10 @@ class MyHTMLParser(HTMLParser):
               self.in_heading = div_id
               if not div_id in self.structure:
                 self.structure[div_id] = dict()
-              if len(self.stack) > 0 and h_depth[tag] <= h_depth[self.stack[-1][0]]:
+              if h_depth[tag] <= h_depth[self.stack[-1][0]]:
                 self.output += f"{indent}</div>\n"
                 self.stack.pop()
-              elif len(self.stack) == 0 or h_depth[tag] >= h_depth[self.stack[-1][0]]:
+              elif h_depth[tag] >= h_depth[self.stack[-1][0]]:
                 self.stack.append((tag, div_id))
                 self.output += f"{indent}<div id=\"{div_id}\" class=\"{tag} h\">\n"
                 self.structure[div_id]["part_of"] = [e[1] for e in self.stack]
@@ -66,7 +67,7 @@ class MyHTMLParser(HTMLParser):
 parser = MyHTMLParser()
 parser.feed(sys.stdin.read())
 
-while len(parser.stack) > 0:
+while len(parser.stack) > 1:
   parser.stack.pop()
   indent = len(parser.stack) * "  "
   parser.output += f"{indent}</div>\n"
