@@ -32,6 +32,7 @@ class MyHTMLParser(HTMLParser):
     in_heading = None
 
     def handle_starttag(self, tag, attrs):
+        indent = len(self.stack) * "  "
         if tag in h_depth.keys():
           for (k, v) in attrs:
             if k == "id":
@@ -40,32 +41,32 @@ class MyHTMLParser(HTMLParser):
               if not div_id in self.structure:
                 self.structure[div_id] = dict()
               if len(self.stack) > 0 and h_depth[tag] < h_depth[self.stack[-1][0]]:
-                self.output += "</div>\n"
+                self.output += f"{indent}</div>\n"
                 self.stack.pop()
               elif len(self.stack) > 0 and h_depth[tag] == h_depth[self.stack[-1][0]]:
-                self.output += "</div>\n"
+                self.output += f"{indent}</div>\n"
                 self.stack.pop()
                 self.stack.append((tag, div_id))
-                self.output += f"<div id=\"{div_id}\" class=\"{tag}\">\n"
+                self.output += f"{indent}<div id=\"{div_id}\" class=\"{tag} h\" >\n"
                 self.structure[div_id]["part_of"] = [e[1] for e in self.stack]
               else:
                 self.stack.append((tag, div_id))
-                self.output += f"<div id=\"{div_id}\" class=\"{tag}\">\n"
+                self.output += f"{indent}<div id=\"{div_id}\" class=\"{tag} h\">\n"
                 self.structure[div_id]["part_of"] = [e[1] for e in self.stack]
-        indent = (len(self.stack) - 1) * "  "
-        self.output += f"{indent}<{tag} {attrs_string(attrs)}>\n"
+        indent = len(self.stack) * "  "
+        self.output += f"{indent}  <{tag} {attrs_string(attrs)}>\n"
 
     def handle_endtag(self, tag):
           self.in_heading = None
-          indent = (len(self.stack) - 1) * "  "
-          self.output += f"{indent}</{tag}>\n"
+          indent = len(self.stack) * "  "
+          self.output += f"{indent}  </{tag}>\n"
 
     def handle_data(self, data):
         if self.in_heading:
           self.structure[self.in_heading]["title"] = data.replace("\n", " ")
         indent = len(self.stack) * "  "
         for line in data.splitlines():
-          self.output += f"{indent}{line}\n"
+          self.output += f"{indent}    {line}\n"
 
 
 parser = MyHTMLParser()
