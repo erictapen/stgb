@@ -26,6 +26,22 @@
   margin-left: 1em;
 }
 
+#left .h3 {
+  background: #aaaaaa;
+}
+
+#left .h4 {
+  background: #999999;
+}
+
+#left .h5 {
+  background: #777777;
+}
+
+#left .h6 {
+  background: #555555;
+}
+
 #right {
   flex: 1;
   margin-left: 2em;

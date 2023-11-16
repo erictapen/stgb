@@ -29,11 +29,17 @@ class MyHTMLParser(HTMLParser):
         if tag in h_depth.keys():
           for (k, v) in attrs:
             if k == "id":
-              if len(self.stack) > 0 and h_depth[tag] <= h_depth[self.stack[-1][0]]:
+              div_id = f"{v}-div"
+              if len(self.stack) > 0 and h_depth[tag] < h_depth[self.stack[-1][0]]:
                 self.output += "</div>\n"
                 self.stack.pop()
+              elif len(self.stack) > 0 and h_depth[tag] == h_depth[self.stack[-1][0]]:
+                self.output += "</div>\n"
+                self.stack.pop()
+                self.stack.append((tag, div_id))
+                self.output += f"<div id=\"{div_id}\" class=\"{tag}\">\n"
+                self.structure[div_id] = [e[1] for e in self.stack]
               else:
-                div_id = f"{v}-div"
                 self.stack.append((tag, div_id))
                 self.output += f"<div id=\"{div_id}\" class=\"{tag}\">\n"
                 self.structure[div_id] = [e[1] for e in self.stack]
