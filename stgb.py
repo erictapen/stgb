@@ -40,8 +40,8 @@ class MyHTMLParser(HTMLParser):
               self.in_heading = div_id
               if not div_id in self.structure:
                 self.structure[div_id] = dict()
-              prev_tag = self.stack[-1][0]
-              if h_depth[prev_tag] >= h_depth[tag]:
+              while h_depth[self.stack[-1][0]] >= h_depth[tag]:
+                indent = len(self.stack) * "  "
                 self.output += f"{indent}</div>\n"
                 self.stack.pop()
               self.stack.append((tag, div_id))
