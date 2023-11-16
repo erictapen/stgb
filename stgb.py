@@ -21,15 +21,24 @@ def attrs_string(attrs):
   return res
 
 class MyHTMLParser(HTMLParser):
+    # Current heading stack
     stack = []
+    # Metadata structure, for JSON output
     structure = dict()
+    # The HTML output
     output = ""
+    # The name of the h* tag we are in right now. None otherwise. This is not
+    # about the chapter, only about the tag.
+    in_heading = None
 
     def handle_starttag(self, tag, attrs):
         if tag in h_depth.keys():
           for (k, v) in attrs:
             if k == "id":
               div_id = f"{v}-div"
+              self.in_heading = div_id
+              if not div_id in self.structure:
+                self.structure[div_id] = dict()
               if len(self.stack) > 0 and h_depth[tag] < h_depth[self.stack[-1][0]]:
                 self.output += "</div>\n"
                 self.stack.pop()
@@ -38,19 +47,22 @@ class MyHTMLParser(HTMLParser):
                 self.stack.pop()
                 self.stack.append((tag, div_id))
                 self.output += f"<div id=\"{div_id}\" class=\"{tag}\">\n"
-                self.structure[div_id] = [e[1] for e in self.stack]
+                self.structure[div_id]["part_of"] = [e[1] for e in self.stack]
               else:
                 self.stack.append((tag, div_id))
                 self.output += f"<div id=\"{div_id}\" class=\"{tag}\">\n"
-                self.structure[div_id] = [e[1] for e in self.stack]
+                self.structure[div_id]["part_of"] = [e[1] for e in self.stack]
         indent = (len(self.stack) - 1) * "  "
         self.output += f"{indent}<{tag} {attrs_string(attrs)}>\n"
 
     def handle_endtag(self, tag):
+          self.in_heading = None
           indent = (len(self.stack) - 1) * "  "
           self.output += f"{indent}</{tag}>\n"
 
     def handle_data(self, data):
+        if self.in_heading:
+          self.structure[self.in_heading]["title"] = data.replace("\n", " ")
         indent = len(self.stack) * "  "
         for line in data.splitlines():
           self.output += f"{indent}{line}\n"
