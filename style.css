@@ -6,11 +6,10 @@
 }
 
 #left {
-  flex: 1;
   font-size: 0.75px;
   width: 50vw;
   columns: 30;
-  column-gap: 4em;
+  column-gap: 0;
   font-weight: 1000;
 }
 
@@ -24,6 +23,14 @@
 
 #left dd {
   margin-left: 1em;
+}
+
+/*#left .h1 {
+  background: #ffffff;
+}
+
+#left .h2 {
+  background: #ffffff;
 }
 
 #left .h3 {
@@ -42,10 +49,21 @@
   background: #555555;
 }
 
+#left .h :hover {
+  background: yellow;
+}*/
+
+#left .highlight {
+  background: yellow;
+};
+
 #right {
-  flex: 1;
-  margin-left: 2em;
-  margin-right: 2em;
+  width: 50vw;
+}
+
+#right h1, #right h2, #right h3, #right h4, #right h5, #right h6 {
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 #right h1 {
