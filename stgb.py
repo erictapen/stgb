@@ -81,3 +81,5 @@ with open("stgb.html", "w") as f:
 
 with open("stgb.json", "w") as f:
   f.write(json.dumps(parser.structure, indent=4))
+
+print(f"Wrote {len(parser.structure)} headings.")
