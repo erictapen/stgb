@@ -91,9 +91,9 @@
 }
 
 #left {
-  font-size: 0.75px;
+  font-size: 1.13px;
   width: 50vw;
-  columns: 30;
+  columns: 26;
   column-gap: 0;
   font-weight: 1000;
 }
@@ -143,12 +143,13 @@
 }
 
 #right h1, #right h2, #right h3, #right h4, #right h5, #right h6 {
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 4rem;
+  margin-right: 4rem;
 }
 
 #right h1 {
   font-size: 400%;
+  font-weight: 500;
 }
 
 #right h3, #right h4, #right h5, #right h6 {
