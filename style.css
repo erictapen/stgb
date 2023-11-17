@@ -82,6 +82,26 @@
     font-weight: 1000;
 }
 
+@media (max-width: 801px) {
+  #app {
+    flex-flow: column !important;
+  }
+  #left {
+    width: 90vw !important;
+    font-size: 0.50px !important;
+    columns: 6 !important;
+  }
+  #right {
+    width: 90vw !important;
+  }
+  #right h1 {
+    font-size: 200% !important;
+  }
+  #right h1, #right h2, #right h3, #right h4, #right h5, #right h6 {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+  }
+}
 
 #app {
   display: flex;
