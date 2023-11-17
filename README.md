@@ -2,6 +2,7 @@
 
 An experiment to make the structure of a long document easier accessible.
 
+![](preview.jpg])
 
 ## Build
 
