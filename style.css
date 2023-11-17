@@ -82,6 +82,7 @@
     font-weight: 1000;
 }
 
+/* mobile */
 @media (max-width: 801px) {
   #app {
     flex-flow: column !important;
@@ -96,10 +97,12 @@
   }
   #right h1 {
     font-size: 200% !important;
+    font-weight: 600;
   }
-  #right h1, #right h2, #right h3, #right h4, #right h5, #right h6 {
+  #right h2, #right h3, #right h4, #right h5, #right h6 {
     margin-left: 1rem !important;
     margin-right: 1rem !important;
+    font-weight: 500;
   }
 }
 
@@ -178,14 +181,16 @@
   width: 50vw;
 }
 
-#right h1, #right h2, #right h3, #right h4, #right h5, #right h6 {
+#right h2, #right h3, #right h4, #right h5, #right h6 {
   margin-left: 4rem;
   margin-right: 4rem;
+  font-weight: 500;
 }
 
 #right h1 {
   font-size: 400%;
-  font-weight: 500;
+  font-weight: 700;
+  text-align: center;
 }
 
 #right h3, #right h4, #right h5, #right h6 {
