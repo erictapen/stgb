@@ -81,7 +81,7 @@ class MyHTMLParser(HTMLParser):
           self.structure[self.in_heading]["section"] = parse_section(sanitized_title)
         else:
           (_, div_id) = self.stack[-1]
-          for s in re.findall(" ([\d]{1,3}[a-z]{0,1})", data):
+          for s in re.findall("([\d]{1,3}[a-z]{0,1})", data):
             if not s in self.sections:
               self.sections[s] = [div_id]
             else:
