@@ -27,11 +27,6 @@ async function init() {
 
       div.addEventListener("pointerenter", (event) => {
         let metadata = data["structure"][event.target.id]
-        event.target.classList.add("highlight");
-        metadata["part_of"].forEach((parent) => {
-          document.getElementById(parent).classList.remove("highlight");
-          document.getElementById(parent).classList.add("lowlight");
-        });
 
         section = metadata["section"];
         if (section) {
@@ -45,6 +40,12 @@ async function init() {
           }
         }
         console.log(referencedElements);
+
+        event.target.classList.add("highlight");
+        metadata["part_of"].forEach((parent) => {
+          document.getElementById(parent).classList.remove("highlight");
+          document.getElementById(parent).classList.add("lowlight");
+        });
 
         document.getElementById(`right-${metadata["level"]}`).innerHTML = metadata["title"];
 
