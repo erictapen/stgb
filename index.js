@@ -24,11 +24,15 @@ async function init() {
 
     Object.keys(data["structure"]).forEach(function(id, _) {
       let div = document.getElementById(id);
+      let metadata = data["structure"][id]
+      let section = metadata["section"];
+
+      if (section) {
+        console.log(section);
+        document.getElementById(id + "-large-heading").innerText = section;
+      }
 
       div.addEventListener("pointerenter", (event) => {
-        let metadata = data["structure"][event.target.id]
-
-        section = metadata["section"];
         if (section) {
           references = data["sections"][section];
           if (references) {
@@ -52,11 +56,9 @@ async function init() {
       });
 
       div.addEventListener("pointerleave", (event) => {
-        let metadata = data["structure"][event.target.id]
         event.target.classList.remove("highlight");
         event.target.classList.remove("lowlight");
 
-        section = metadata["section"];
         if (section) {
           references = data["sections"][section];
           if (references) {

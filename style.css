@@ -121,6 +121,15 @@
   font-weight: 500;
 }
 
+.large-heading {
+  font-size: 12px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: -0.2em;
+  margin-bottom: -0.2em;
+  text-align: center;
+}
+
 #left ol {
   padding-left: 1em;
 }
@@ -174,7 +183,7 @@
 }
 
 #left .h6 .referenced {
-  background: blue !important;
+  background: lightblue !important;
 }
 
 #right {
