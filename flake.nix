@@ -1,23 +1,31 @@
 {
   description = "Strafgesetzbuch viewer";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  inputs.gesetze.url = "github:bundestag/gesetze";
-  inputs.gesetze.flake = false;
-
-  outputs = { self, nixpkgs, gesetze }: 
-  let
-    pkgs = import nixpkgs { system = "x86_64-linux"; };
-  in {
-
-    packages.x86_64-linux.stgb = pkgs.callPackage ./. {
-      inherit gesetze;
-      inherit (self.packages.x86_64-linux) generate-icons;
-    };
-
-    packages.x86_64-linux.generate-icons = import ./icons.nix pkgs;
-
-    packages.x86_64-linux.default = self.packages.x86_64-linux.stgb;
-
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+    gesetze.url = "github:bundestag/gesetze";
+    gesetze.flake = false;
   };
+
+  outputs = { self, nixpkgs, flake-utils, gesetze }:
+    flake-utils.lib.eachSystem
+      [ "x86_64-linux" "aarch64-linux" ]
+      (system:
+        let pkgs = nixpkgs.legacyPackages.${system}; in
+        {
+
+
+          packages = {
+            default = self.packages.${system}.stgb;
+            stgb = pkgs.callPackage ./. {
+              inherit gesetze;
+              inherit (self.packages.${system}) generate-icons;
+            };
+
+            generate-icons = import ./icons.nix pkgs;
+
+          };
+
+        });
 }
