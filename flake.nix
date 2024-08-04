@@ -2,7 +2,7 @@
   description = "Strafgesetzbuch viewer";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     gesetze.url = "github:bundestag/gesetze";
     gesetze.flake = false;
